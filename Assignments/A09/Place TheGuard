@@ -1,0 +1,73 @@
+#include <iostream>
+#include <queue>
+#include <cmath>
+#include <vector>
+using namespace std;
+
+// Driver program
+int main()
+{
+    int T, v, e;
+    cin >> T;
+    while (T--)
+    {
+        cin >> v >> e;
+        int **city = new int *[v];
+        for (int i = 0; i < v; i++)
+        {
+            city[i] = new int[v];
+            for (int j = 0; j < v; j++)
+                city[i][j] = -1;
+        }
+        int f, t;
+        for (int i = 0; i < e; i++)
+        {
+            cin >> f >> t;
+            city[f][t] = 1;
+            city[t][f] = 1;
+        }
+        bool flag = true;
+        int nextnode = 0;
+        int totalcount = 0;
+        vector<int> nodes(v, -1);
+
+        for (int i = 0; i < v && flag; i++)
+        {
+            if(nodes[i]!=-1)
+            continue;
+            queue<int> q;
+            q.push(i);
+            nodes[i] = 0;
+            int count0 = 1, count1 = 0;
+            while (!q.empty() && flag)
+            {
+                nextnode = q.front();
+                q.pop();
+                for (int j = 0; j < v; j++)
+                {
+                    if (city[nextnode][j] == 1)
+                    {
+                        if (nodes[j] == nodes[nextnode])
+                        {
+                            flag = false;
+                            break;
+                        }
+                        else if (nodes[j] == -1)
+                        {
+                            nodes[j] = !nodes[nextnode];
+                            nodes[j] == 1 ? count1++ : count0++;
+                            q.push(j);
+                        }
+                    }
+                }
+            }
+            int mini = min(count0, count1);
+            mini > 1 ? totalcount += mini : totalcount += 1;
+        }
+        if (flag)
+            cout << totalcount << endl;
+        else
+            cout << -1 << endl;
+    }
+    return 0;
+}
