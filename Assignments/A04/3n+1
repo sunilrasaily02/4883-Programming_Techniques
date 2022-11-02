@@ -1,0 +1,49 @@
+#include <iostream>
+
+using namespace std;
+long long countCycle(long long num)
+{
+    long long counter = 1;
+    while (num != 1)
+    {
+        counter++;
+        if (num % 2) // if Odd
+        {
+            num = num * 3 + 1;
+        }
+        else
+        {
+            num = num / 2; // if Even
+        }
+    }
+    return counter;
+}
+
+int main()
+{
+
+    long long input1, input2;
+    long long max = 0;
+    long long temp;
+    while (cin >> input1 && cin >> input2)
+    {
+        bool flag = false;
+        if (input1 > input2)
+        {
+            swap(input1, input2);
+            flag = true;
+        }
+        max = 0;
+        for (long long i = input1; i <= input2; i++)
+        {
+            temp = countCycle(i);
+            if (temp > max)
+                max = temp;
+        }
+        if(flag)
+        swap(input1, input2);
+        cout << input1 << " " << input2 << " " << max << endl;
+    }
+
+    return 0;
+}
