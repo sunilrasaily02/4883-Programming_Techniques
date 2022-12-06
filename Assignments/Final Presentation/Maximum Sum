@@ -1,0 +1,93 @@
+#include <iostream> 
+#include <climits>
+using namespace std;
+
+/// Function to find the sum of the sub array
+///************************************************************
+/// variables
+///************************************************************
+// arr = array of integers
+// sr  = starting row index
+// sc  = starting column index
+// r   = number of rows
+// c   = number of columns
+// n   = dimension of the array
+///************************************************************
+int sumOfArray(int **arr, int sr, int sc, int r, int c, int n) {
+    int sum = 0;
+    // Loop through the elements until the number of elements is reached
+    // or it moves through the dimension of the array
+    for (int i = 0; sr + i < n && i < r; i++) {
+        for (int j = 0; sc + j < n && j < c; j++) {
+            // accumulate each value
+            sum += arr[sr + i][sc + j];
+        }
+    }
+    // return the sum
+    return sum;
+}
+
+/// Function to find the maximum sum of all the sub-arrays
+/// which can be formed from the starting indexes.
+///************************************************************
+/// variables
+///************************************************************
+// arr = array of integers
+// r   = starting row index
+// c   = starting column index
+// n   = dimension of the array
+///************************************************************
+int maxSum(int **arr, int r, int c, int n) {
+    int maxSum = INT_MIN;
+    // Start through the minimum size of the sub-array i.e 2
+    // and then increase the size
+    for (int i = 2; i < n; i++) {
+        for (int j = 2; j < n; j++) {
+            // Get the sum of the selected sub array
+            int sum = sumOfArray(arr, r, c, i, j, n);
+            // Compare the sum with max and update if needed
+            if (maxSum < sum) {
+                maxSum = sum;
+            }
+        }
+    }
+    // return the maximum sum
+    return maxSum;
+}
+
+int main() {
+    // local variables
+    int **arr;          // pointer to pointer to integer for the 2-D array
+    int n;              // dimension of the array
+    
+    cin >> n;           // input dimension
+    arr = new int*[n];  // allocate memory
+    for (int i = 0; i < n; i++) {
+        arr[i] = new int[n];        // allocate memory
+        for (int j = 0; j < n; j++) {
+            cin >> arr[i][j];       // input elements
+        }
+    }
+    
+    // variables for maximum sum
+    int max = 0;
+    // loop through the array
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // Find the maximum sum of all the sub-arrays at this index
+            int sum = maxSum(arr, i, j, n);
+            // compare and update max if necessary
+            if (max < sum) {
+                max = sum;
+            }
+        }
+    }
+    // Display the max sum
+    cout << max << endl;
+    
+    // De-allocate the memory
+    for (int i = 0; i < n; i++) {
+        delete[] arr[i];
+    }
+    delete[] arr;
+}
